@@ -123,23 +123,23 @@
 # GTest のCMakeを使った設定方法
 - root, root/sourcedir, root/testdir がある場合。
 - root/CMakeListsの書き方
-    cmake_minimum_required(VERSION 3.0)
-    project(ProjectX)
-    add_subdirectory(sourcedir) //下にあるdirectoryのCMakelistsを読みにいく
-    add_subdirectory(testdir) //同上
-    enable_testing() // テストを有効にする
-    add_test(NAME ProjectX COMMAND Test) //testを追加　NAME projName, Command Testするライブラリ
+     cmake_minimum_required(VERSION 3.0)
+     project(ProjectX)
+     add_subdirectory(sourcedir) //下にあるdirectoryのCMakelistsを読みにいく
+     add_subdirectory(testdir) //同上
+     enable_testing() // テストを有効にする
+     add_test(NAME ProjectX COMMAND Test) //testを追加　NAME projName, Command Testするライブラリ
 - root/source/CMakelists
-    cmake_minimum_required(VERSION 3.0)
-    add_library(my_lib STATIC mysource.cpp) //my_alg ライブラリを作成スタティックリンク libmy_alg.aができる。実質ar -o libmy_alg.a myalg.cppをしているのと同じ.
+     cmake_minimum_required(VERSION 3.0)
+     add_library(my_lib STATIC mysource.cpp) //my_alg ライブラリを作成スタティックリンク libmy_alg.aができる。実質ar -o libmy_alg.a myalg.cppをしているのと同じ.
 - root/test/CMakeLists.txt
-    cmake_minimum_required(VERSION 3.0)
-    set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}) //runtime directoryをセットする
-    set(GTEST_ROOT ~/xxxx/gooletest/googletest) //googletestのパスをGTEST_ROOTに設定
-    include_directories(GTEST_ROOT/include/) //getestのinclude direcotryを指定
-    link_directories(GTEST_ROOT/build/) //gtestのbuildディレクトリをリンクディレクトリに追加
-    add_executable(Test ${CMAKE_CURRENT_CURRENT_DIR}/test.cpp) //Testという名前のtestのsourcefileのexeを追加
-    target_link_libralies(Test my_lib gtest gtest_main pthread)
+        cmake_minimum_required(VERSION 3.0)
+        set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}) //runtime directoryをセットする
+        set(GTEST_ROOT ~/xxxx/gooletest/googletest) //googletestのパスをGTEST_ROOTに設定
+        include_directories(GTEST_ROOT/include/) //getestのinclude direcotryを指定
+        link_directories(GTEST_ROOT/build/) //gtestのbuildディレクトリをリンクディレクトリに追加
+        add_executable(Test ${CMAKE_CURRENT_CURRENT_DIR}/test.cpp) //Testという名前のtestのsourcefileのexeを追加
+        target_link_libralies(Test my_lib gtest gtest_main pthread)
 
 このようにして、root/buildでcmake -DCMAKE_BUILD_TYPE=Debug or Release .. して、さらにmakeすれば
 root/buildのtestの下にtestディレクトリが出来ていて、そこにexeが出来ている。
