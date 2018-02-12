@@ -26,11 +26,11 @@
 
 # vim 
 - 検索 /hoge, nで次の候補
-    - n: step over
-    - s: step in
-    - finish: step out
-    - space + m 選択文字のハイライト
-    - shift space + m 解除
+- n: step over
+- s: step in
+- finish: step out
+- space + m 選択文字のハイライト
+- shift space + m 解除
 
 ## break point
     - fileにブレーク：br set -f "file名" -l "行番号" 
@@ -59,10 +59,10 @@
     - n, s 等で通常通り進んでいく
     -
 # C++ Build(Compile Link)
-    - Compile: g++ file名たち -o object名 (e.g. g+++ hoge1.cpp hoge2.cpp main.cpp -o hoge)
-    -  -o で実行形式ファイルを指定、何も指定しないとa.outとなる。
-    - 実際はオブフェクトファイルを生成し、その後それらをリンクするという作業を行なっている. -c とすると、オブジェクトファイル作成までを行う(e.g. g++ hoge1.cpp hoge2. cpp main.cpp -c).
-    - object fileまで終わると、.o file達が出来ていて、これを使って、実行形式を作る事も出来る(e.g. g++ hoge1.o hoge2.o main.o -o fuga)。
+- Compile: g++ file名たち -o object名 (e.g. g+++ hoge1.cpp hoge2.cpp main.cpp -o hoge)
+-  -o で実行形式ファイルを指定、何も指定しないとa.outとなる。
+- 実際はオブフェクトファイルを生成し、その後それらをリンクするという作業を行なっている. -c とすると、オブジェクトファイル作成までを行う(e.g. g++ hoge1.cpp hoge2. cpp main.cpp -c).
+- object fileまで終わると、.o file達が出来ていて、これを使って、実行形式を作る事も出来る(e.g. g++ hoge1.o hoge2.o main.o -o fuga)。
 ## Makefileの活用
     - Makefileというファイルを作る
     - 以下のように処理を記述
@@ -83,41 +83,63 @@
     - Debug/Release mode 指定：cmake -DCMAKE_BUILD_TYPE=Debug or Release
 
 # Library作成
-    - 静的リンクライブラリと共有ライブラリがある。
-    - 静的リンクライブラリ(.a)について
-     1. オブジェクトファイルを作る g++ xxxx.cpp yyy.cpp -c
-     2. アーカイブにする。(libライブラリ名.aにするのが慣習) ar -r libライブラリ名.a xxxx.o yyyy.o 
-     3. コンパイル時にリンクする。 g++ -o zzzz.cpp libhoge.a
-    - 共有ライブラリ（動的リンク）について
-     1. cpp file を元にdylibを作る(libライブラリ名.dylibにするのが慣習)。g++ -dynamiclib -o libライブラリ名.dylib xxx.cpp yyy.cpp
-     2. compile時にdylibファイルとリンクさせる。g++ -o xxx xxxx.dylib main.cpp
+- 静的リンクライブラリと共有ライブラリがある。
+- 静的リンクライブラリ(.a)について
+ 1. オブジェクトファイルを作る g++ xxxx.cpp yyy.cpp -c
+ 2. アーカイブにする。(libライブラリ名.aにするのが慣習) ar -r libライブラリ名.a xxxx.o yyyy.o 
+ 3. コンパイル時にリンクする。 g++ -o zzzz.cpp libhoge.a
+- 共有ライブラリ（動的リンク）について
+1. cpp file を元にdylibを作る(libライブラリ名.dylibにするのが慣習)。g++ -dynamiclib -o libライブラリ名.dylib xxx.cpp yyy.cpp
+2. compile時にdylibファイルとリンクさせる。g++ -o xxx xxxx.dylib main.cpp
 
 # CMakeを使った静的リンク
-    - root/Hogeディレクトリに作ったLibライブラリをroot/main.cppにリンクする。
-    - Hogeにfunc1.cpp, func2.cppがあるとする。
-    - Hoge/CMakeLists.txtに以下を記述。
-         cmake_minimum_required(VERSION3.0)
-        add_library(Lib STATIC func1.cpp func2.cpp) 
-        => cmakeを行ったdirectory(root/debug or root/release)にlibLib.aが出来る.
-    - root/CmakeLists.txtに以下を記述
-        cmake_minimum_required(VERSION 3.0)
-        project(static_lib)
-        add_subdirectory(Hoge)
-        add_executable(static_lib main.cpp func1 func2)
-        target_link_libralies(static_lib Lib)
+- root/Hogeディレクトリに作ったLibライブラリをroot/main.cppにリンクする。
+- Hogeにfunc1.cpp, func2.cppがあるとする。
+- Hoge/CMakeLists.txtに以下を記述。
+     cmake_minimum_required(VERSION3.0)
+    add_library(Lib STATIC func1.cpp func2.cpp) 
+    => cmakeを行ったdirectory(root/debug or root/release)にlibLib.aが出来る.
+- root/CmakeLists.txtに以下を記述
+    cmake_minimum_required(VERSION 3.0)
+    project(static_lib)
+    add_subdirectory(Hoge)
+    add_executable(static_lib main.cpp func1 func2)
+    target_link_libralies(static_lib Lib)
 
 # CMakeをつかった動的リンク
-    - root/Hogeディレクトリに作ったHogeライブラリをroot/main.cppにリンクする。
-    - Hogeにfunc1.cpp, func2.cppがあるとする。
-    - Hoge/CmakeListsに以下を記述。
-        cmake_minimum_required(VERSION3.0)
-        add_library(Lib SHARED func1.cpp func2.cpp) 
-        => rootのcmakeを行ったdirectory(root/debug or root/release)にlibLib.dylibが出来る。
-     - root/CmakeLists.txtに以下を記述
-        cmake_minimum_required(VERSION 3.0)
-        project(DynamicLib)
-        add_subdirectory(Hoge)
-        add_executable(static_lib main.cpp)
-        target_link_libralies(DynamicLib Lib)
+- root/Hogeディレクトリに作ったHogeライブラリをroot/main.cppにリンクする。
+- Hogeにfunc1.cpp, func2.cppがあるとする。
+- Hoge/CmakeListsに以下を記述。
+    cmake_minimum_required(VERSION3.0)
+    add_library(Lib SHARED func1.cpp func2.cpp) 
+    => rootのcmakeを行ったdirectory(root/debug or root/release)にlibLib.dylibが出来る。
+- root/CmakeLists.txtに以下を記述
+    cmake_minimum_required(VERSION 3.0)
+    project(DynamicLib)
+    add_subdirectory(Hoge)
+    add_executable(static_lib main.cpp)
+    target_link_libralies(DynamicLib Lib)
 
+# GTest のCMakeを使った設定方法
+- root, root/sourcedir, root/testdir がある場合。
+- root/CMakeListsの書き方
+cmake_minimum_required(VERSION 3.0)
+project(ProjectX)
+add_subdirectory(sourcedir) //下にあるdirectoryのCMakelistsを読みにいく
+add_subdirectory(testdir) //同上
+enable_testing() // テストを有効にする
+add_test(NAME ProjectX COMMAND Test) //testを追加　NAME projName, Command Testするライブラリ
+- root/source/CMakelists
+cmake_minimum_required(VERSION 3.0)
+add_library(my_lib STATIC mysource.cpp) //my_alg ライブラリを作成スタティックリンク libmy_alg.aができる。実質ar -o libmy_alg.a myalg.cppをしているのと同じ.
+- root/test/CMakeLists.txt
+cmake_minimum_required(VERSION 3.0)
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}) //runtime directoryをセットする
+set(GTEST_ROOT ~/xxxx/gooletest/googletest) //googletestのパスをGTEST_ROOTに設定
+include_directories(GTEST_ROOT/include/) //getestのinclude direcotryを指定
+link_directories(GTEST_ROOT/build/) //gtestのbuildディレクトリをリンクディレクトリに追加
+add_executable(Test ${CMAKE_CURRENT_CURRENT_DIR}/test.cpp) //Testという名前のtestのsourcefileのexeを追加
+target_link_libralies(Test my_lib gtest gtest_main pthread)
 
+このようにして、root/buildでcmake -DCMAKE_BUILD_TYPE=Debug or Release .. して、さらにmakeすれば
+root/buildのtestの下にtestディレクトリが出来ていて、そこにexeが出来ている。
