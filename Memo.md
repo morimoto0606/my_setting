@@ -13,6 +13,7 @@
 - prefix + p: prev page
 - prefix + [: pageをスクロールする
 - prefix + ;: 以前の画面（pain）に移動
+- prefix + q: 画面の番号の表示, さらに、番号を押すとその番号の画面に移動
 
 # terminal
 - alt + N : new terminal
@@ -132,6 +133,7 @@
 - root/source/CMakelists
      - cmake_minimum_required(VERSION 3.0)
      - add_library(my_lib STATIC mysource.cpp) //my_alg ライブラリを作成スタティックリンク libmy_alg.aができる。実質ar -o libmy_alg.a myalg.cppをしているのと同じ.
+     - add_library(my_lib SHARED mysource.cpp) で共有リンクしても良い。
 - root/test/CMakeLists.txt
      -   cmake_minimum_required(VERSION 3.0)
      -   set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}) //runtime directoryをセットする
