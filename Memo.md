@@ -170,7 +170,7 @@
 # Git
     - merge: --no-ff とするとbranchからマージしたことが明確に残る
     - git log --graph ブランチを視覚的に見る
-# zsh, bash
+# zsh, bash : Vim key bind
     - set -o vi: zsh がvim keybind になる。
     - bind '"jj": vi-movement-mode'
 # Tex by windows
