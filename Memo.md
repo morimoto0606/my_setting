@@ -166,14 +166,62 @@
     - run=> runwith=>custom configuration=>Run on external...のチェックをはずして実行する
     - 文字列の入力: StreamReader, StreamWriter
     - File 操作：File...
+    - exeの実行時は外部プログラムの実行を外せばvisual studio内の画面に表示される。
 
 # Git
+## git の基本
+git には３つの状態がある。
+
+    - ワークツリー
+    - インデックス
+    - リポジトリ
+
+- git add: ワークツリーの変更をindexに登録する。
+- git commit: indexの変更をレポジトリに登録する.
+- git commit -a: add commitを同時にやる
+- 一つずつadd してcommitするのが正攻法
+- まとめてaddするには
+    - git add -A: 全てのworktreeのファイルをindexにadd
+    - git add -u: 全てのworktreeのファイルをindexにadd
+
+git diff でそれぞれの差分を見る方法
+
+    - git diff: worktreeとindexのdiff
+    - git diff --cached: index とHEAD(repository)のdiff
+    - git diff HEAD: worktreeとrepositoryのdiff
+
     - merge: --no-ff とするとbranchからマージしたことが明確に残る
     - git log --graph ブランチを視覚的に見る
-# zsh, bash : Vim key bind
+# Shell
+## Vim key bind
     - set -o vi: zsh がvim keybind になる。
     - bind '"jj": vi-movement-mode'
+## grep
+grep -xx '正規表現' file名 
+
+    - -r: 再帰的に directoryないも探していく。
+    - -n: 行を表示する
+    - -E: 拡張正規表現を使う
+    - -i: 大文字小文字区別しない
+
+## sed
+sed 's/検索値/置換値/フラグ' file名
+
+    - フラグ：g:全検索
+    - sedはファイルを上書きしない, print するだけ。
+    - fileに書き出すときはリダイレクトする
+
+## awk
+awk '{アクション}' file名
+
+    - 例：awk '{print $2,$3}' file名
+    - -F:
+    - csv カンマ区切りをフィールド分割する
+    - 例：awk -F '{sum += $NF} END{print sum}' file名
 # Tex by windows
     - Vim-Latex (Latex-Suite) のwikiを参考にした。
     - pathogenにプラグイン置く
     - vimrcをコピー、gvimの部分のみvimに修正
+    - latexmk -pdfdvi xxxx.tex
+
+
