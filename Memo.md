@@ -30,6 +30,27 @@
     - finish: step out
     - space + m 選択文字のハイライト
     - shift space + m 解除
+    - yy : １行丸ごとコピー
+    - P: 前にpaste
+    - p: 後ろにpaste
+    - ~: 大文字と小文字入れ替え
+    - {: 前の段落
+    - }: 次の段落
+    - n: 検索を繰り返す
+    - N: 逆方向に検索を繰り返す。
+    - l1, l2s/old/new/gc: l1~l2の間のold new置換(確認しながら)
+        - y: 一つずつ置換する
+        - n: 一つずつ置換しない
+        - a: 全て置換する
+        - q: 全て置換しない
+    - 手軽な置換：
+        - /hoge ：hogeを検索
+        - cwfuga: hugaに置換
+        - n : 次に移動
+        - . : 繰り返し
+    - ヤンクした文字列のコピー: q/で検索する。
+    - !ctags hoge.hpp : tagファイルを作ってくれ関数にジャンプできる。
+    - tag funcNmae とすると、関数の定義にジャンプできる。戻るにはctrl t
 
 # break point
     - fileにブレーク：br set -f "file名" -l "行番号" 
@@ -170,7 +191,16 @@
 
 # Git
 ## git の基本
-git には３つの状態がある。
+git には２つのリポジトリがある。
+
+    local repository
+    remote repository
+
+- 通常はremote repositoryをcloneしてきて
+- local repositoryを作る。
+- remote repositoryはデフォルトでorignという名前で登録。
+
+そして、各レポジトリには３つの状態がある。
 
     - ワークツリー
     - インデックス
@@ -181,21 +211,55 @@ git には３つの状態がある。
 - git commit -a: add commitを同時にやる
 - 一つずつadd してcommitするのが正攻法
 - まとめてaddするには
-    - git add -A: 全てのworktreeのファイルをindexにadd
+    - git add -A: 変更のあったworktreeのファイルをindexにadd
     - git add -u: 全てのworktreeのファイルをindexにadd
 
-git diff でそれぞれの差分を見る方法
+## remote repository
+- git --bare init: localでremote の作成。バックアップの作成と同じ。
+- GitHub のGUIで生成するとGitHubのサーバー上にremote repositoryが生成される。
+- GitHubで生成したremote リポジトリはデフォルトでoriginと言う名前。
+- repository path に別名をつける: git remote add <別命> <リポジトリパス> , e.g. git remote add origin xxxx
+- remote => local : git clone <複製元リポジトリ>
+- local => remote : git push <送信先リポジトリ> <送信元ブランチ>:<送信先ブランチ>, 
+    -  <送信元ブランチ>:<送信先ブランチ> が同じ場合は単純にひとつで良い。e.g.: mater:master => masterで良い。
+    -  送信先リポジトリはあるように通常はoriginと言う名前にしておく。(GitHubで生成したリポジトリはremoteという名前)
+    -  典型例；git push origin master
 
-    - git diff: worktreeとindexのdiff
-    - git diff --cached: index とHEAD(repository)のdiff
-    - git diff HEAD: worktreeとrepositoryのdiff
+## git diff でそれぞれの差分を見る方法
+- git diff: worktreeとindexのdiff
+- git diff --cached: index とHEAD(repository)のdiff
+- git diff HEAD: worktreeとrepositoryのdiff
 
-    - merge: --no-ff とするとbranchからマージしたことが明確に残る
-    - git log --graph ブランチを視覚的に見る
+## 間違い修正
+- worktreeを元に戻す: fileをコミットする前
+- HEADでワークツリーを上書けばよい
+    - git checkout HEAD .
+
+- 誤ったcommitの修正
+- commitを取り消す
+    - git revert <取り消したいcommitのオブジェクト名>
+
+- merge: --no-ff とするとbranchからマージしたことが明確に残る
+- git log --graph ブランチを視覚的に見る
+
+## brunchを使う
+master: デフォルトのブランチ（repository生成時に最初に自動生成）
+- master ブランチをプロジェクトの本流に使用する
+- git branch: branch 一覧を表示、ワークツリーに*がつく
+- git branch 新規ブランチ名：新しいブランチを作成
+
+
+
 # Shell
 ## Vim key bind
     - set -o vi: zsh がvim keybind になる。
     - bind '"jj": vi-movement-mode'
+
+## 正規表現
+    [^abc] : a or b or c以外の任意の１文字
+    x{n, m}: xがn回以上、m回以下
+
+
 ## grep
 grep -xx '正規表現' file名 
 
@@ -203,6 +267,7 @@ grep -xx '正規表現' file名
     - -n: 行を表示する
     - -E: 拡張正規表現を使う
     - -i: 大文字小文字区別しない
+    - -H: ファイル名表示
 
 ## sed
 sed 's/検索値/置換値/フラグ' file名
@@ -218,10 +283,33 @@ awk '{アクション}' file名
     - -F:
     - csv カンマ区切りをフィールド分割する
     - 例：awk -F '{sum += $NF} END{print sum}' file名
+
 # Tex by windows
     - Vim-Latex (Latex-Suite) のwikiを参考にした。
     - pathogenにプラグイン置く
     - vimrcをコピー、gvimの部分のみvimに修正
     - latexmk -pdfdvi xxxx.tex
 
+# Python
+## Tensorflow
+
+- sessionの考え方
+    - 従来はwith tf.Session() as sess:
+- AADの流れ
+    - tf.reset_default_graph() : グラフ初期化
+    - x = tf.placeholder(float32, 'x')
+    - y = tf.placeholder(float32, 'y')
+    - f = tf.f(x, y) : 適当に関数を定義する
+    - dfdx, dfdy = tf.gradients(f, [x, y]
+    - feeddict = {x:0.1, y:0.2}
+
+    - with tf.Session as sess: Sessionブロック上で定義した関数や計算が実行される。変数はここで代入。計算グラフが作られる。
+    - session.run(tf.global_variable_initializer())
+    - session.run([dfdx, dfdy], feeddifct)
+ 
+- Eager Execution の登場
+    - import tensorflow.contrib.eager as tfe
+    - tfe.enable_eager_execution()
+    - と最初にやっておくと、sessionを立ち上げて、with ブロックの中でやらなくても良くなる
+    - 出力された値はtf.tensorという型になっているが、.numpy()とすれば普通の値になる。A
 
