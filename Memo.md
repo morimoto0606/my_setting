@@ -89,6 +89,7 @@
     - 2 生成手順を次の行に書く。Tabでスタートすることに注意,debug情報つけるのも普通に出来る。
     - (e.g.   g++ -g hoge1.cpp hoge2.cpp main.cpp -o hoge)
     - Makefileが出来たら、そのディレクトリでmakeすればOK
+
 # CMakeの活用
     - CMakeは自動的にMakefileを作ってくれるツール
     - cmake でMakefile作成
@@ -176,6 +177,11 @@
     - auto ptr2 = unique_ptr<int>(&a); はできる。
     - 同じaをさすので、もしptr1が先に破棄された場合、ptr2はメモリリークになる。
 
+#  C++ enable_if
+    - 関数のオーバーロードみたいなも
+    - 関数のオーバーロードは引数の違いでBranchingするが、Tの場合見分けられない。
+    - enable_if<Condition, ret Type> func(xxx) とすると、ret typeは一緒でもBranchingできる。
+ 
 # Markdown Vim
     - PrevimOpen : Firefoxが立ちあがってプレビューしてくれる。
 
@@ -248,8 +254,6 @@ master: デフォルトのブランチ（repository生成時に最初に自動�
 - git branch: branch 一覧を表示、ワークツリーに*がつく
 - git branch 新規ブランチ名：新しいブランチを作成
 
-
-
 # Shell
 ## Vim key bind
     - set -o vi: zsh がvim keybind になる。
@@ -291,8 +295,14 @@ awk '{アクション}' file名
     - latexmk -pdfdvi xxxx.tex
 
 # Python
-## Tensorflow
+## Debug
+- pudb
+    - pudb hoge.py でデバッグモード
+    - n: step over
+    - s: step in
+    - b: break
 
+## Tensorflow
 - sessionの考え方
     - 従来はwith tf.Session() as sess:
 - AADの流れ
@@ -302,7 +312,6 @@ awk '{アクション}' file名
     - f = tf.f(x, y) : 適当に関数を定義する
     - dfdx, dfdy = tf.gradients(f, [x, y]
     - feeddict = {x:0.1, y:0.2}
-
     - with tf.Session as sess: Sessionブロック上で定義した関数や計算が実行される。変数はここで代入。計算グラフが作られる。
     - session.run(tf.global_variable_initializer())
     - session.run([dfdx, dfdy], feeddifct)
@@ -311,5 +320,162 @@ awk '{アクション}' file名
     - import tensorflow.contrib.eager as tfe
     - tfe.enable_eager_execution()
     - と最初にやっておくと、sessionを立ち上げて、with ブロックの中でやらなくても良くなる
-    - 出力された値はtf.tensorという型になっているが、.numpy()とすれば普通の値になる。A
 
+# Rust
+- make project: cargo new --bin "project name"
+- fn 5
+- open debug add configuration
+- select "LLDB" , then setting is written in launch.jsonk
+- add "terminal": "integrated: in launch.json
+https://murabitoleg.com/mac-rust-vscode/
+
+# CPP in VSCode
+- command + ` :  画面移動
+- command + shift + B: window ビルド、
+    - tasks.jsonを以下のように編集
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "0.1.0",
+    "command": "clang",
+    "isShellCommand": true,
+    "args": [
+        "test.c", // プログラムファイル
+        "-g",     // デバッグ情報付加する。ないとデバッグできない。
+        "-O0",    // コンパイル速度重視
+        "-m32"    // 64bitの場合
+    ],
+    "showOutput": "always"
+}
+- run :./a.outで実行, commmand + shift + ` でterminal移動
+- Debug
+    - F5 or spyder マークを押すとlaunch.jsonがないと言われるので、自動設定する。
+    基本デフォルトだが、programだけ、余分dものをとっって次のようにする。
+    　"program": "${workspaceFolder}/a.out",
+
+## VSCode 
+### C++
+    tasks.json : run (cmd shift B) した時に走るタスクを決めている(shell でコマンドを打つのと同じ)。 -gはデバッグ情報を出すのに必要
+    e.g.
+        "tasks": [
+        {
+            "label": "clang++",
+            "type": "shell",
+            "command": "clang++",
+            "args": [
+                "main.cpp",j
+                "-g",
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        }
+    ]
+
+    launch.json
+    F5を押して、C/C++を初回実行すると作られる。
+    実行するexeを決める。デフォルトa.outなので、その前にもともとついている文字を消せば良い。
+
+
+    c_cpp_properties.json
+        inculude path 等を指定できるもの
+        e.g.
+            "configurations": [
+        {
+            "name": "Mac",
+            "includePath": [
+                "${workspaceFolder}/**"
+            ],
+            "defines": [],
+            "macFrameworkPath": [
+                "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.14.sdk/System/Library/Frameworks"
+            ],
+            "compilerPath": "/usr/bin/clang",
+            "cStandard": "c11",
+            "cppStandard": "c++17",
+            "intelliSenseMode": "clang-x64"
+        }
+    ],
+    "version": 4
+    }
+        
+### Vscode C++ CMakeを使った場合
+    Buildがdebug情報付きで終わっているとする。
+    F5でC/C++を押せば、launch.jsonができる。
+    それを適当に直せばBuildできる。
+    今の所、exeをよしなに直せば動いている。
+
+    attatch : 実行中のプロセスに張り付いて、デバッグすること.
+    実行するプロセスをexeにすると、launchと変わらず実行される。
+
+    ちゃんとcmakeでDebug buildする。
+       cmake -DCMAKE_BUILD_TYPE=Debug ..
+
+# Ubuntu Install
+    Multi Boot
+        - Application -> Utility ->Disc Utlity.app
+        - Partition を入れる。
+        - Ubuntu -> USB install (balena Etcher tool)
+        - install (Dual boot OK, Multi boot Fail ??)
+    Virtual Box
+    - Virtual Box install
+    - Ubuntu install 
+
+# ssh
+    - use open ssh server
+    - sudo apt install openssh-server
+    - adressの確認：ubuntuなら画面右上のネットワークをクリックすると確認できる。
+    - SSH connection: ssh userName@Ip Adress or client name
+     e.g ssh obi-one@192.168.0.8
+    
+# gdbserver : remote debug with VSCode
+    - remote でのデバッグをするためのもの。
+    - remote: gdbserver
+    - local: gdb
+    として、localのgdbでリモートのコードを辿れる。
+    基本的には以下の通り。
+    https://medium.com/@spe_/debugging-c-c-programs-remotely-using-visual-studio-code-and-gdbserver-559d3434fb78
+
+## Without VsCode
+    1. ssh でポートを開いて、remoteのポートとlocalのポートを綱ぐ。
+        - local$ ssh -L(remotePortNum):localhost:(LocalPortNum) user@remoteIpadress 
+        (port番号は被らなければ任意、リモートとローカルで同じ番号でも良い)
+        e.g.  local:yoda, remote:obione の場合
+        - local@ ssh -L9999@localhost:9999 obi-one@192.169.0.8
+    2. remoteでgdbserver:portNum 実行ファイル を呼ぶ
+        - remote@ gdbserver:9999 ./a.out
+    3. local でgdb 起動、そして　target remote portNumと呼ぶ
+        - gdb
+        - target remote localhost:9999
+    4. 通常通りlocal gdb debugするとremote のデバッグができる。
+## With VsCode
+    1. 同じ
+    2. sshfsで remote のディレクトリをlocalにマウントする（ローカルのディレクトリにリンクする）
+    e.g. remote@ /Test/main.cpp, a.outの場合
+        - local@ mkdir /Test (localにマウント先のディレクトリを作る)
+        - local@ sshfs remoteUser@IpAdress:mountDir localDir
+        e.g local@ sshfs obi-one@192.168.0.8:Test ./Test
+    3. gdbserver をリモートで起動. withoutの場合と同じ。
+    4. mount されたdirをVScodeで開いてデバッグ開始。 launch.jsonは以下のような感じ
+      "configurations": [
+        {
+          "name": "C++ Launch",
+          "type": "cppdbg",
+          "request": "launch",
+          "program": "${workspaceRoot}/a.out",
+          "miDebuggerServerAddress": "localhost:9999",
+          "args": [],
+          "stopAtEntry": false,
+          "cwd": "${workspaceRoot}",
+          "environment": [],
+          "externalConsole": false,
+          "MIMode": "gdb"
+        }
+        特に、j
+          "miDebuggerServerAddress": "localhost:9999",
+        が通常と違うところで、これをやると、remoteのコードにアクセスでき、VsCode上でデバッグできる。
+    
+    ただし、今の所std::vectorなどは見えない。
+    remote上のpretty-printingの問題。
+    
