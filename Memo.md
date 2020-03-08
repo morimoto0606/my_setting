@@ -480,11 +480,18 @@ https://murabitoleg.com/mac-rust-vscode/
     remote上のpretty-printingの問題。
 
 
-   # Docker 
-   - docker images: Show all images
-   - docker ps -a : Show all processes
-   - docker exit : process id
-   - docker restart process id
+# Docker 
+    - docker images: Show all images
+    - docker ps -a : Show all processes
+
+    - docker exit : exit process id
+        - to restrat: 
+        - docker restart process id
+        - docker attatch process id
+    
+    - ctrl p q: not exit
+        - to restrat: docker attatch process id
+
    - docker-compose run dev bash
 
 
