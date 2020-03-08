@@ -478,4 +478,25 @@ https://murabitoleg.com/mac-rust-vscode/
     
     ただし、今の所std::vectorなどは見えない。
     remote上のpretty-printingの問題。
-    
+
+
+   # Docker 
+   - docker images: Show all images
+   - docker ps -a : Show all processes
+   - docker exit : process id
+   - docker restart process id
+   - docker-compose run dev bash
+
+
+   - docker-compose.ymlからビルドする
+   docker-compose build 
+   - ymlに書かれてるコンテナを起動する　
+   docker-compose run
+   - backgroundで起動する場合、
+   - -dオプションをつける
+   - コンテナの確認
+   docker-compose ls
+   - コンテナの終了
+   docker-compose kill
+   - コンテナの削除
+   docker-compose rm
