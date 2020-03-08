@@ -481,9 +481,24 @@ https://murabitoleg.com/mac-rust-vscode/
 
 
 # Docker 
+## make image build from docker-compose
+    - docker-compose.ymlからビルドする
+        - docker-compose build 
+    - ymlに書かれてるコンテナを起動する　
+        - docker-compose run dev bash
     - docker images: Show all images
     - docker ps -a : Show all processes
 
+## docker run container from image obtained from DockerHub
+    - docker create -it -v {mount host direcotry path (absolute)}:{path in container} {image name}
+    - e.g. docker create -it -v /home/morimoto/Public/GitHub/QuantsCpp/GeometricSde:/dev/GeometricSde morimoto0606/geometricsde_dev
+    - start {process id}
+
+## docker command
+    - docker images: Show all images
+    - docker ps -a : Show all processes
+    - docker rm {process id}
+    - docker rmi {image name}
     - docker exit : exit process id
         - to restrat: 
         - docker restart process id
@@ -492,18 +507,3 @@ https://murabitoleg.com/mac-rust-vscode/
     - ctrl p q: not exit
         - to restrat: docker attatch process id
 
-   - docker-compose run dev bash
-
-
-   - docker-compose.ymlからビルドする
-   docker-compose build 
-   - ymlに書かれてるコンテナを起動する　
-   docker-compose run
-   - backgroundで起動する場合、
-   - -dオプションをつける
-   - コンテナの確認
-   docker-compose ls
-   - コンテナの終了
-   docker-compose kill
-   - コンテナの削除
-   docker-compose rm
