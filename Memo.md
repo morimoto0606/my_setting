@@ -492,7 +492,7 @@ https://murabitoleg.com/mac-rust-vscode/
 ## docker run container from image obtained from DockerHub
     - docker create -it -v {mount host direcotry path (absolute)}:{path in container} {image name}
     - e.g. docker create -it -v /home/morimoto/Public/GitHub/QuantsCpp/GeometricSde:/dev/GeometricSde morimoto0606/geometricsde_dev
-    - start {process id}
+    - docker start {process id}
 
 ## docker command
     - docker images: Show all images
@@ -507,3 +507,7 @@ https://murabitoleg.com/mac-rust-vscode/
     - ctrl p q: not exit
         - to restrat: docker attatch process id
 
+## current project in Docker
+    - sde-geometrization 
+        - 10b10665c710 geometricsde_dev    
+        - root@10b10665c710:~/dev/source/src#    
