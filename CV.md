@@ -1,6 +1,13 @@
 # Working Experienc
+
+## 2024/04 - Present
+- MUFG Bank, Desk quants.
+
+## 2021/01 - 2024/04
+- MUFG Bank, EFX model quants.
+
 ## 2019/01 - 2021/01
-- Morgan Stanley (NY)
+- Morgan Stanley, NY, 
   
 ## 2012/06 - 2019/01
 MUFG Bank, Global Plannning Devision, 
