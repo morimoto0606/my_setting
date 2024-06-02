@@ -38,6 +38,5 @@ Best Paper Award, JSIAM, 2018.
 # Publication
 - Kusuoka, S., and Y.Morimoto, Stochastic mesh methods for H¨ormander type diffusion processes Adv. Math. Econ. vol.18 (2014),61-99.
 - Kusuoka, S., and Y.Morimoto, Least Square Regression methods for Bermudan Derivatives and systems of functions Adv. Math. Econ. vol.19 (2015), 57-89
-
-- Algebraic structure of vector fields in financial Diffusion Processes, Quantative Finance, 2017-issue7, 1105-1117.
-- Implicit American Monte Carlo methods for nonlinear functional of future portfolio value, JJIAM, vol34(2017)pp.635-674.
+- Morimoto, Y., M.Sasada, Algebraic structure of vector fields in financial diffusion models and its applications, Quantative Finance, 2017-issue7, 1105-1117.
+- Morimoto, Y., Implicit American Monte Carlo methods for nonlinear functional of future portfolio value, JJIAM, vol34(2017)pp.635-674.
